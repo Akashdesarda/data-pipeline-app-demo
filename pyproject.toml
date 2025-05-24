@@ -1,0 +1,39 @@
+[project]
+name = "data-pipeline-app-demo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "adbc-driver-postgresql>=1.6.0",
+    "adlfs>=2024.12.0",
+    "alive-progress>=3.2.0",
+    "azure-identity>=1.23.0",
+    "azure-storage-blob>=12.25.1",
+    "faker>=37.3.0",
+    "joblib>=1.5.1",
+    "polars[deltalake]>=1.30.0",
+    "pydantic>=2.11.5",
+    "pydantic-settings>=2.9.1",
+    "rich>=14.0.0",
+    "sqlglot>=26.19.0",
+    "ujson>=5.10.0",
+]
+
+[project.optional-dependencies]
+deltalake = [
+    "polars>=1.30.0",
+]
+
+[dependency-groups]
+dev = ["ipykernel>=6.29.5", "ruff>=0.11.11"]
+
+[project.scripts]
+data-pipeline-app-demo = "data_pipeline_app_demo:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
