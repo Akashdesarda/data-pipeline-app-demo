@@ -47,8 +47,22 @@ def total_ticket_revenue_last_hour(fact_orders: pl.LazyFrame) -> pl.LazyFrame:
     )
 
 
+def total_ticket_revenue_last_week(fact_orders: pl.LazyFrame) -> pl.LazyFrame:
+    one_hour_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    return fact_orders.filter(pl.col("time_key") >= one_hour_ago).select(
+        pl.col("price").sum().alias("total_revenue")
+    )
+
+
 def active_sessions_last_15_minutes(clickstream_data: pl.LazyFrame) -> pl.LazyFrame:
-    fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=15)
+    fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=1)
     return clickstream_data.filter(
         pl.col("event_timestamp") >= fifteen_minutes_ago
     ).select(pl.col("session_id").n_unique().alias("active_sessions"))
+
+
+def active_sessions_last_1_day(clickstream_data: pl.LazyFrame) -> pl.LazyFrame:
+    one_day_ago = datetime.now(timezone.utc) - timedelta(days=1)
+    return clickstream_data.filter(pl.col("event_timestamp") >= one_day_ago).select(
+        pl.col("session_id").n_unique().alias("active_sessions")
+    )
