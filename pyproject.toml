@@ -11,19 +11,20 @@ dependencies = [
     "azure-identity>=1.23.0",
     "azure-storage-blob>=12.25.1",
     "faker>=37.3.0",
+    "fastapi>=0.115.12",
     "joblib>=1.5.1",
+    "kafka-python>=2.2.10",
+    "orjson>=3.10.18",
     "polars[deltalake]>=1.30.0",
     "pydantic>=2.11.5",
     "pydantic-settings>=2.9.1",
     "rich>=14.0.0",
     "sqlglot>=26.19.0",
-    "ujson>=5.10.0",
+    "uvicorn>=0.34.2",
 ]
 
 [project.optional-dependencies]
-deltalake = [
-    "polars>=1.30.0",
-]
+deltalake = ["polars>=1.30.0"]
 
 [dependency-groups]
 dev = ["ipykernel>=6.29.5", "ruff>=0.11.11"]
