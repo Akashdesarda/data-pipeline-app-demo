@@ -13,6 +13,11 @@ from src.ops.transform import (
 app = FastAPI()
 
 
+@app.get("/")
+async def root():
+    return {"message": "API is running"}
+
+
 @app.get("/v1/kpi")
 async def calculate_kpi(name: KPIType) -> ORJSONResponse:
     """Calculate the specified KPI."""

@@ -399,7 +399,7 @@ requires-dist = [
     { name = "azure-identity", specifier = ">=1.23.0" },
     { name = "azure-storage-blob", specifier = ">=12.25.1" },
     { name = "faker", specifier = ">=37.3.0" },
-    { name = "fastapi", extras = ["uvicorn"], specifier = ">=0.115.12" },
+    { name = "fastapi", specifier = ">=0.115.12" },
     { name = "joblib", specifier = ">=1.5.1" },
     { name = "kafka-python", specifier = ">=2.2.10" },
     { name = "orjson", specifier = ">=3.10.18" },
