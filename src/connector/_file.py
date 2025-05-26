@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Generator
 
+import orjson
 import polars as pl
-import ujson
 from adlfs import AzureBlobFileSystem
 from deltalake.table import TableMerger
 
@@ -593,8 +593,8 @@ class FileDataLoader:
         >>> from src.data import DataLoader
         >>> data = DataLoader.json_from_disk("path/to/xyz.json")
         """
-        with open(file_path) as json_file:
-            return ujson.load(json_file)
+        with open(file_path, "rb") as json_file:
+            return orjson.loads(json_file.read())
 
     @classmethod
     def json_from_blob(cls, blob_path: str, storage_option: dict[str, str]) -> dict:
@@ -620,8 +620,8 @@ class FileDataLoader:
         >>> d2 = DataLoader.json_from_blob("az://eds/us/testdir/akash/dummy.json", storage_option)
         """
         fs = AzureBlobFileSystem(**storage_option)
-        with fs.open(blob_path, "r") as f:
-            return ujson.load(f)
+        with fs.open(blob_path, "rb") as f:
+            return orjson.loads(f.read())
 
     @classmethod
     def parquet_from_disk(
@@ -828,7 +828,6 @@ class FileDataLoader:
     ) -> Generator[Path, None, None]:
         """Gives a list of all files based on file pattern
 
-
         Parameters
         ----------
         file_parent_path : str
@@ -836,10 +835,8 @@ class FileDataLoader:
         pattern : str
             File pattern to locate all the files. This pattern supports all types of `glob` pattern.
 
-
         Yields:
             Generator[str, None, None]: generator with all the files discoverd based on file pattern
-
 
         Example
         -------
@@ -847,6 +844,27 @@ class FileDataLoader:
         >>> f = DataLoader.ls_files_from_disk("/path/to/some/directory","**/*.json") # eg 2
         """
         return Path(file_parent_path).glob(pattern)
+
+    @classmethod
+    def ls_files_from_blob(cls, path: str, storage_option: dict) -> list[str]:
+        """Gives a list of all files based on file pattern
+
+        Parameters
+        ----------
+        path : str
+            file path along with regex pattern to find all files
+        storage_option: dict
+            Storage options to read parquet from azure blob storage.
+
+        Returns:
+            list[str]: list of all the files discoverd based on file pattern
+
+        Example
+        -------
+        >>> f = DataLoader.ls_files_from_blob("abfs://some-container/path/to/some/dir/***.json")
+        """
+        fs = AzureBlobFileSystem(**storage_option)
+        return fs.glob(path=path)
 
 
 @dataclass
@@ -958,8 +976,8 @@ class FileDataWriter:
             raise FileNotFoundError("Given save path is not a json file")
 
         # indent=4 will save json data in a nice formatted way
-        with open(save_path, "w") as json_file:
-            ujson.dump(data, json_file, indent=4)
+        with open(save_path, "wb") as json_file:
+            json_file.write(orjson.dumps(data))
 
     @classmethod
     def json_to_blob(
@@ -991,8 +1009,8 @@ class FileDataWriter:
         ... )
         """
         fs = AzureBlobFileSystem(**storage_option)
-        with fs.open(blob_path, "w") as blob:
-            ujson.dump(data, blob, indent=4)
+        with fs.open(blob_path, "wb") as blob:
+            blob.write(orjson.dumps(data))
 
     @classmethod
     def ndjson_to_disk(cls, df: pl.DataFrame, save_path: str | Path):
