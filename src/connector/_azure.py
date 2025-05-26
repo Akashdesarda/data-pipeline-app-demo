@@ -38,7 +38,7 @@ class BlobStorageClient:
     Examples
     --------
     >>> from kroll.identity import GenerateSASToken, ResourceTypesTemplate, SASPermissionsTemplate
-    >>> from src.data import BlobStorageClient
+    >>> from src.connector import BlobStorageClient
 
         # Connection string
     >>> blob_utility = BlobStorageClient(connection_string="***")
@@ -124,7 +124,7 @@ class BlobStorageClient:
 
         Examples
         --------
-        >>> from src.data import BlobStorageClient
+        >>> from src.connector import BlobStorageClient
         >>> blob_utility = BlobStorageClient(auth_token=***, storage_account_name='dummy-st-account')
         >>> container = blob_utility.complete_container_utility(container_name="bronze")
         """
@@ -150,7 +150,7 @@ class BlobStorageClient:
 
         Examples
         --------
-        >>> from src.data import BlobStorageClient
+        >>> from src.connector import BlobStorageClient
         >>> blob_utility = BlobStorageClient(auth_token="***", storage_account_name='dummy-st-account')
         >>> container = blob_utility.complete_blob_tree(container_name="bronze", "bronze"'products/some-folder/')
         """
@@ -173,7 +173,7 @@ class BlobStorageClient:
 
         Examples
         --------
-        >>> from src.data import BlobStorageClient
+        >>> from src.connector import BlobStorageClient
         >>> blob_utility = BlobStorageClient(auth_token="***", storage_account_name='dummy-st-account')
         >>> container = blob_utility.unit_blob_utility(absolute_blob_path='curated/product/xyz.csv')
         """
@@ -214,7 +214,7 @@ class BlobStorageClient:
 
         Examples
         --------
-        >>> from src.data import BlobStorageClient
+        >>> from src.connector import BlobStorageClient
         >>> blob_utility = BlobStorageClient(auth_token="***", storage_account_name='dummy-st-account')
             # just downloading
         >>> blob_utility.download_blob(
@@ -261,7 +261,7 @@ class BlobStorageClient:
 
         Examples
         --------
-        >>> from src.data import BlobStorageClient
+        >>> from src.connector import BlobStorageClient
         >>> blob_utility = BlobStorageClient(auth_token="***", storage_account_name='dummy-st-account')
             # uploading a file present on disk
         >>> blob_utility.upload_blob(
@@ -299,7 +299,7 @@ class BlobStorageClient:
 
         Examples
         --------
-        >>> from src.data import BlobStorageClient
+        >>> from src.connector import BlobStorageClient
         >>> blob_utility = BlobStorageClient(auth_token="***", storage_account_name='dummy-st-account')
         >>> blob_tree = blob_utility.complete_blob_tree(
         ...    container_name="bronze", "bronze"'products/purchase-price-allocation/'
@@ -334,7 +334,7 @@ class BlobStorageClient:
 
         Examples
         --------
-        >>> from src.data import BlobStorageClient
+        >>> from src.connector import BlobStorageClient
         >>> blob_utility = BlobStorageClient(auth_token="***", storage_account_name='dummy-st-account')
         >>> disk_tree = list(Path("some/directory").glob("*.csv"))
         >>> abs_blob_tree = [f"curated/products/{file.name}" for file in disk_tree]

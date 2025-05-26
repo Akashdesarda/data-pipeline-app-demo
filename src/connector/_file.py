@@ -36,7 +36,7 @@ class DeltaTableLoader:
 
         Examples
         --------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
 
             # Reading delta table without any additional config
         >>> data = DataLoader.delta_table_from_disk("path/to/delta-table")
@@ -89,7 +89,7 @@ class DeltaTableLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> storage_options = {"account_name":"<storage_account_name>", "sas_token":"<token>"}
 
             # Reading delta table without any additional config
@@ -146,7 +146,7 @@ class DeltaTableWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
 
             # write the table with 'overwrite' mode
         >>> DataWriter.delta_table_to_disk(df, "path/to/delta-table", mode="overwrite")
@@ -195,7 +195,7 @@ class DeltaTableWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> import pyarrow as pa
 
         >>> storage_options = {"account_name":"<storage_account_name>", "sas_token":"<token>"}
@@ -254,7 +254,7 @@ class DeltaTableWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> merge_options = DataWriter.generate_delta_table_merge_method_options(
         ...     when_not_matched_insert_all=True, when_matched_update_all=True,
         ... )
@@ -330,7 +330,7 @@ class DeltaTableWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> merge_options = DataWriter.generate_delta_table_merge_method_options(
             when_not_matched_insert_all=True, when_matched_update_all=True,
             )
@@ -505,7 +505,7 @@ class FileDataLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> data = DataLoader.csv_from_disk("path/to/xyz.csv")
         """
         if "storage_option" in kwargs:
@@ -551,7 +551,7 @@ class FileDataLoader:
 
          Example
          -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> data = DataLoader.csv_from_blob(
         ...     "abfss://eds@devstoreaccount1.dfs.core.windows.net/testdir/akash/dummy.csv",storage_option
         ... )
@@ -590,7 +590,7 @@ class FileDataLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> data = DataLoader.json_from_disk("path/to/xyz.json")
         """
         with open(file_path, "rb") as json_file:
@@ -613,7 +613,7 @@ class FileDataLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> d1 = DataLoader.json_from_blob(
         ...     "abfss://eds@devstoreaccount1.dfs.core.windows.net/us/testdir/akash/dummy.json", storage_option
         ... )
@@ -649,7 +649,7 @@ class FileDataLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> data = DataLoader.parquet_from_disk("path/to/xyz.parquet")
             # with some other polars options
         >>> data = DataLoader.parquet_from_disk("path/to/xyz.parquet", lazy=False, low_memory=True)
@@ -701,7 +701,7 @@ class FileDataLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> data = DataLoader.parquet_from_blob(
         ...     "abfss://eds@devstoreaccount1.dfs.core.windows.net/testdir/akash/dummy.parquet",storage_option
         ... )
@@ -739,7 +739,7 @@ class FileDataLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> data = DataLoader.ndjson_from_disk("path/to/xyz.ndjson")
         """
         return pl.scan_ndjson(file_path) if lazy else pl.read_ndjson(file_path)
@@ -770,7 +770,7 @@ class FileDataLoader:
 
         Example
         -------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
         >>> data = DataLoader.ndjson_from_blob("abfss://eds@devstoreaccount1.dfs.core.windows.net/testdir/akash/dummy.ndjson",storage_option)
         """
         # first download the file to a temporary location
@@ -807,7 +807,7 @@ class FileDataLoader:
 
         Examples
         --------
-        >>> from src.data import DataLoader
+        >>> from src.connector import DataLoader
             # this is entire string
         >>> sample_data_local = DataLoader.text_from_disk("tests/sample.txt")
             # this is a generator
@@ -897,7 +897,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> DataWriter.csv_to_disk(df, "path/to/xyz.csv")
 
 
@@ -937,7 +937,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> data = DataWriter.csv_to_blob(
         ...     "abfss://eds@devstoreaccount1.dfs.core.windows.net/testdir/akash/delta-table", storage_option
         ... )
@@ -968,7 +968,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> data = {"city": "mumbai", "country": IN}
         >>> DataWriter.json_to_disk(data, "path/to/xyz.json")
         """
@@ -1002,7 +1002,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> data = {"city": "mumbai", "country": "IN"}
         >>> DataWriter.json_to_blob(
         ...     data, "abfss://eds@devstoreaccount1.dfs.core.windows.net/testdir/akash/dummy.json", storage_option
@@ -1027,7 +1027,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> DataWriter.ndjson_to_disk(df, "path/to/xyz.ndjson")
         """
         if Path(save_path).suffix != ".ndjson":
@@ -1058,7 +1058,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> DataWriter.ndjson_to_blob(df, "az://eds/testdir/akash/dummy.ndjson", storage_option)
         """
         fs = AzureBlobFileSystem(**storage_option)
@@ -1085,7 +1085,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> DataWriter.parquet_to_disk(df, "path/to/xyz.parquet")
 
 
@@ -1124,7 +1124,7 @@ class FileDataWriter:
 
         Example
         -------
-        >>> from src.data import DataWriter
+        >>> from src.connector import DataWriter
         >>> DataWriter.parquet_to_blob(df, "az://eds/testdir/akash/dummy.parquet", storage_option)
 
 
