@@ -26,12 +26,14 @@ async def calculate_kpi(name: KPIType) -> ORJSONResponse:
         fact_order = DataLoader.delta_table_from_disk(
             parent_folder_path / "data/gold/partner_agency_booking_data/fact_orders"
         )
+        # using async to collect the result &  avoid blocking the event loop
         result = await total_ticket_revenue_last_week(fact_order).collect_async()
 
     if name == KPIType.active_sessions:
         clickstream_data = DataLoader.delta_table_from_disk(
             parent_folder_path / "data/bronze/clickstream_data_data"
         )
+        # using async to collect the result &  avoid blocking the event loop
         result = await active_sessions_last_1_day(clickstream_data).collect_async()
 
     return ORJSONResponse({"kpi": name.value, "value": result.item(0, 0)})
