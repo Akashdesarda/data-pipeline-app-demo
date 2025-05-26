@@ -7,8 +7,11 @@ class LocalEnvironmentSettings(BaseSettings):
     AZURITE_CONNECTION_STRING: str
     azure_storage_account_name: str = "devstoreaccount1"
     postgres_port: str = "5432"
-    postgres_username: str = "akash"
+    postgres_username: str = "postgres"
     POSTGRES_PASSWORD: str
+    kafka_bootstrap_server: str = "pkc-7prvp.centralindia.azure.confluent.cloud:9092"
+    kafka_user_name: str = "R2Y2MQCJFA2FEXWT"
+    KAFKA_CLIENT_SECRET: str
 
     # NOTE - loading secrets from .env file for local development. Higher environments should use
     # environment variables populated by the deployment pipeline.
@@ -16,35 +19,51 @@ class LocalEnvironmentSettings(BaseSettings):
 
 
 class DevEnvironmentSettings(BaseSettings):
+    # NOTE - below fields will be picked up from respective environment's variable added by deployment pipeline
     AZURITE_CONNECTION_STRING: str
     azure_storage_account_name: str
     postgres_port: str
     postgres_username: str
     POSTGRES_PASSWORD: str
+    kafka_bootstrap_server: str
+    kafka_user_name: str
+    KAFKA_CLIENT_SECRET: str
 
 
 class QAEnvironmentSettings(BaseSettings):
+    # NOTE - below fields will be picked up from respective environment's variable added by deployment pipeline
     AZURITE_CONNECTION_STRING: str
     azure_storage_account_name: str
     postgres_port: str
     postgres_username: str
     POSTGRES_PASSWORD: str
+    kafka_bootstrap_server: str
+    kafka_user_name: str
+    KAFKA_CLIENT_SECRET: str
 
 
 class UATEnvironmentSettings(BaseSettings):
+    # NOTE - below fields will be picked up from respective environment's variable added by deployment pipeline
     AZURITE_CONNECTION_STRING: str
     azure_storage_account_name: str
     postgres_port: str
     postgres_username: str
     POSTGRES_PASSWORD: str
+    kafka_bootstrap_server: str
+    kafka_user_name: str
+    KAFKA_CLIENT_SECRET: str
 
 
 class PRODEnvironmentSettings(BaseSettings):
+    # NOTE - below fields will be picked up from respective environment's variable added by deployment pipeline
     AZURITE_CONNECTION_STRING: str
     azure_storage_account_name: str
     postgres_port: str
     postgres_username: str
     POSTGRES_PASSWORD: str
+    kafka_bootstrap_server: str
+    kafka_user_name: str
+    KAFKA_CLIENT_SECRET: str
 
 
 def get_config(
