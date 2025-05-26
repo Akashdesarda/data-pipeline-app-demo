@@ -1,7 +1,13 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel, Field
+
+
+class KPIType(Enum):
+    total_revenue = "total_revenue"
+    active_sessions = "active_sessions"
 
 
 # Model for partner-agency booking system
