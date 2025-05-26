@@ -6,7 +6,7 @@ import polars as pl
 from adbc_driver_postgresql.dbapi import connect
 
 from src.config import get_config
-from src.data import DataLoader
+from src.connector import DataLoader
 
 logger = logging.getLogger("data-pipeline")
 config = get_config(os.getenv("ENV", "local"))
@@ -21,6 +21,23 @@ class Consumer:
             "account_name": config.azure_storage_account_name,
             "connection_string": config.AZURITE_CONNECTION_STRING,
         }
+
+    def get_latest_file_from_azure(self, path: str) -> str:
+        """Get latest file based on path regex pattern
+
+        Parameters
+        ----------
+        path : str
+            file path regex pattern
+
+        Returns
+        -------
+        str
+            path of latest created file
+        """
+        files = DataLoader.ls_files_from_blob(path, self._storage_option)
+        files.sort()
+        return files[-1]
 
     def read_csv_from_azure(self, blob_path: str) -> pl.LazyFrame:
         """Read CSV data from Azure Blob Storage
@@ -68,7 +85,7 @@ class Consumer:
             data as polars LazyFrame
         """
         logger.debug(f"Reading messages from Kafka topic {topic}")
-        # return DataLoader.kafka_from_topic(topic)
+        return DataLoader.message_from_topic(topic).lazy()
 
     def read_data_from_postgres(self, query: str) -> pl.LazyFrame:
         """Read table data from postgresql db
