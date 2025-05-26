@@ -6,7 +6,7 @@ import polars as pl
 from adbc_driver_postgresql.dbapi import connect
 
 from src.config import get_config
-from src.data import DataWriter
+from src.connector import DataWriter
 
 logger = logging.getLogger("data-pipeline")
 config = get_config(os.getenv("ENV", "local"))
@@ -46,16 +46,18 @@ class Publisher:
         DataWriter.parquet_to_blob(self.data, blob_path, self._storage_option)
         logger.debug(f"successfully saved parquet file to azure at {blob_path}")
 
-    def message_to_kafka(self, topic: str):
+    def message_to_kafka(self, topic: str, key_name: str | None):
         """Publish data to Kafka topic
 
         Parameters
         ----------
         topic : str
             kafka topic name to publish data as messages
+        key_name : str | None
+            key name to whose value need to be published as kry
         """
+        DataWriter.json_to_topic(self.data, topic, key_name)
         logger.debug(f"successfully published messages to kafka topic {topic}")
-        pass
 
     def data_to_postgres(self, table: str):
         """Writes data to given table in postgresql db
@@ -68,5 +70,7 @@ class Publisher:
         with connect(
             f"postgresql://{config.postgres_username}:{config.POSTGRES_PASSWORD}@localhost:{config.postgres_port}/playground"
         ) as conn:
-            self.data.write_database(table_name=table, connection=conn)
+            self.data.write_database(
+                table_name=table, connection=conn, if_table_exists="append"
+            )
         logger.debug(f"successfully written data to postgresql table {table}")
