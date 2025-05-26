@@ -1,4 +1,5 @@
 import logging
+from datetime import timezone
 from random import choice, uniform
 
 from faker import Faker
@@ -16,8 +17,12 @@ def generate_dummy_partner_agency_booking() -> PartnerAgencyBooking:
         agency_id=choice(["agency1", "agency2", "agency3", "agency4"]),
         customer_name=fake.name(),
         flight_number=f"VA{fake.random_int(min=1000, max=9999)}",
-        departure_date=fake.date_time_between(start_date="now", end_date="+30d"),
-        arrival_date=fake.date_time_between(start_date="+1d", end_date="+31d"),
+        departure_date=fake.date_time_between(
+            start_date="-1d", end_date="+30d", tzinfo=timezone.utc
+        ),
+        arrival_date=fake.date_time_between(
+            start_date="+1d", end_date="+31d", tzinfo=timezone.utc
+        ),
         price=round(uniform(100.0, 1000.0), 2),
         currency=choice(["USD", "EUR", "GBP", "INR"]),
         status=choice(["confirmed", "canceled", "pending"]),
@@ -37,7 +42,9 @@ def generate_dummy_clickstream_event(allow_duplicates=False) -> ClickstreamEvent
         user_id=fake.uuid4() if fake.boolean() else None,
         session_id=fake.uuid4(),
         event_type=choice(["page_view", "button_click", "form_submit"]),
-        event_timestamp=fake.date_time_between(start_date="-30d", end_date="now"),
+        event_timestamp=fake.date_time_between(
+            start_date="-30d", end_date="now", tzinfo=timezone.utc
+        ),
         page_url=fake.url(),
         referrer_url=fake.url() if fake.boolean() else None,
         user_agent=fake.user_agent(),
@@ -54,6 +61,3 @@ def generate_dummy_clickstream_event(allow_duplicates=False) -> ClickstreamEvent
     generated_events.append(new_event)
     logger.debug("generating dummy data for clickstream event")
     return new_event
-
-
-# def produce_dummy_kafka_event()
